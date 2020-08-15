@@ -1,5 +1,7 @@
 package com.lapras.cv.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lapras.cv.model.cv.ResumeFormDTO;
 import com.lapras.cv.service.CVService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,11 @@ public class LaprasController {
     private CVService cvService;
 
     @PostMapping("/generate/cv")
-    public void generateCV(@RequestBody ResumeFormDTO resumeFormDTOForm) {
-        this.cvService.generate(resumeFormDTOForm);
+    public ResponseEntity<byte[]> generateCV(@RequestBody ResumeFormDTO resumeFormDTOForm) {
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header("Content-Disposition", "attachment; filename=" + "CV.pdf")
+                .body(this.cvService.generate(resumeFormDTOForm));
     }
 
     @GetMapping("/check")

@@ -11,7 +11,8 @@ public class ResumeFormDTO {
     private ExperienceDTO experience;
     private List<ProjectDTO> projects;
 
-    public ResumeFormDTO() {
+    public ResumeFormDTO(){}
+    public ResumeFormDTO(boolean isDefault) {
         this.address = new AddressDTO("John Doe", "Beverly hills, CA", "9898989898", "JohnDoe@email.com");
         this.educations = Arrays.asList(
                 new EducationDTO("Stanford University","B.E.","2013","2017","70 %"),

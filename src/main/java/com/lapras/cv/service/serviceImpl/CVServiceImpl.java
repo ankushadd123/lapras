@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 
 import com.itextpdf.text.*;
@@ -23,22 +24,23 @@ public class CVServiceImpl implements CVService {
         Document document = new Document();
         ByteArrayOutputStream data = new ByteArrayOutputStream();
         try {
-            ResumeFormDTO resumeFormDTO = new ResumeFormDTO();
+            ResumeFormDTO resumeFormDTO = resumeFormDTOForm;
+//            ResumeFormDTO resumeFormDTO = new ResumeFormDTO(true);
             PdfWriter writer = PdfWriter.getInstance(document, data);
             document.open();
             PdfPTable address = getAddress(resumeFormDTO.getAddress());
             PdfPTable education = getEducation(resumeFormDTO.getEducations());
             PdfPTable introduction = getIntroduction(resumeFormDTO.getIntroduction());
-            PdfPTable experienceAndProject = getExperienceAndProjects(resumeFormDTO.getExperience(), resumeFormDTO.getProjects());
+//            PdfPTable experienceAndProject = getExperienceAndProjects(resumeFormDTO.getExperience(), resumeFormDTO.getProjects());
 
             document.add(address);
             document.add(education);
-            document.add(experienceAndProject);
+//            document.add(experienceAndProject);
             document.add(introduction);
 
             document.close();
             writer.close();
-            return data.toByteArray();
+            return Base64.getEncoder().encode(data.toByteArray());
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -47,7 +49,7 @@ public class CVServiceImpl implements CVService {
 
     @Override
     public byte[] generateSampleCV() {
-        return generate(null);
+        return generate(new ResumeFormDTO());
     }
 
     private PdfPCell getDefaultCell() {
