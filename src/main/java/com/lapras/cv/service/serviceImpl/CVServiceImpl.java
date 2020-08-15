@@ -31,7 +31,7 @@ public class CVServiceImpl implements CVService {
             PdfPTable address = getAddress(resumeFormDTO.getAddress());
             PdfPTable education = getEducation(resumeFormDTO.getEducations());
             PdfPTable introduction = getIntroduction(resumeFormDTO.getIntroduction());
-//            PdfPTable experienceAndProject = getExperienceAndProjects(resumeFormDTO.getExperience(), resumeFormDTO.getProjects());
+            PdfPTable experienceAndProject = getExperienceAndProjects(resumeFormDTO.getExperience(), resumeFormDTO.getProjects());
 
             document.add(address);
             document.add(education);
@@ -49,7 +49,7 @@ public class CVServiceImpl implements CVService {
 
     @Override
     public byte[] generateSampleCV() {
-        return generate(new ResumeFormDTO());
+        return generate(new ResumeFormDTO(true));
     }
 
     private PdfPCell getDefaultCell() {
@@ -301,10 +301,12 @@ public class CVServiceImpl implements CVService {
         int padding = 10;
 
         PdfPCell companyName = getDefaultCell(true);
+        if(experienceDTO != null){
         companyName.setColspan(4);
         companyName.addElement(new CompanyNameFormat(experienceDTO.getCompany() + ", " + experienceDTO.getCity()
                 + " (" + experienceDTO.getStartDate() + " to " + experienceDTO.getEndDate() + ")"));
         experienceTable.addCell(companyName);
+	}
 
         experienceTable.addCell(getEmptyCell(true));
         experienceTable.addCell(getEmptyCell(true));
